@@ -53,8 +53,8 @@
 
   <h2>Student List</h2>
 
-  <p>There is/are
-    <span id="student-count">
+  <p>There are
+    <span id="student-count">{{ studentCount }}
         <!-- Create a computed property called studentCount and use it to display the student count here -->
         </span>
     student(s) in the club.</p>
@@ -70,7 +70,7 @@
   </ul>
 
   <!-- Add a v-on to call removeSelectedStudents -->
-  <button id="remove-selected-students">Remove selected students</button>
+  <button v-on:click="removeSelectedStudents" id="remove-selected-students">Remove selected students</button>
 
 </div>  <!-- end of div#app -->
 
@@ -120,21 +120,32 @@
       const newStudentID = ref('')
       // const new
       // Create a new ref newStudentGpa, initially an empty string
+      const newStudentGpa = ref('')
 
       // Use this for form validation
       const errors = ref([])
 
       // Create a computed property studentCount. This will set the value to the length of the student list.
+      const studentCount = computed(() => studentList.value.length)
 
       const addNewStudent = () => { // function definition
 
 
         // Set the errors value to an empty array
+        // const errors = []
 
         // Read the value from newStudentName. If it is empty, add an error message to the end of the errors ref.
-
+        if (newStudentName.value === '') {
+          errors.value.push('Student name must be entered')
+        }
         // Read the value from newStudentId. If it is empty, add an error message to the end of the errors ref.
+        if (newStudentID.value === '') {
+          errors.value.push('Student ID must be entered')
+        }
         // Read the value from newStudentGPA. If it is empty, add an error message to the end of the errors ref.
+        if (newStudentGpa.value === '') {
+          errors.value.push('Student GPA must be entered')
+        }
         //  And, check that newStudentGPA is between 0 and 4. If not, add an error message to the end of the errors ref.
 
         // Check the length of errors. If it is more than 0, show an alert with the error message(s)
@@ -163,6 +174,9 @@
           // Add this new object to the end of studentList
 
           // Set the value of newStudentName, newStudentId, newStudentGpa to empty strings, to clear the form
+          newStudentName.value = ''
+          newStudentID.value = ''
+          newStudentGpa.value = ''
         }
       }
 
@@ -170,6 +184,7 @@
         // Remove all students with selected = true from the studentList. You can do this with filter,
         // or you can make a new empty array, loop over the studentList, and copy all selected = false students
         // to the new list, then replace the value of studentList with the new array
+        studentList.value = studentList.value.filter(student => !student.selected)
       }
 
 
@@ -186,6 +201,7 @@
         // data for the page:
         newStudentName,
         newStudentID,
+        studentCount,
 
         studentList,
 
